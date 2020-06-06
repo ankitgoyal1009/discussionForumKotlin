@@ -9,4 +9,6 @@
     <string name="error_invalid_email">Invalid Email</string>
     <string name="error_user_already_exists">User already exists</string>
     <string name="registration_success">Welcome to Discussion Forum</string>
+    <string name="error_user_not_found">Invalid Credentials</string>
+    <string name="error_authentication_failed">Unable to verify credentials</string>
 </resources>

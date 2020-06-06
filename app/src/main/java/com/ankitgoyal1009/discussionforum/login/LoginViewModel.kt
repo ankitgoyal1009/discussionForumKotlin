@@ -3,12 +3,14 @@ package com.ankitgoyal1009.discussionforum.login
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import com.ankitgoyal1009.discussionforum.login.data.Session
 import com.ankitgoyal1009.discussionforum.login.data.User
+import java.util.*
 
 class LoginViewModel(private val mApplication: Application) : AndroidViewModel(mApplication) {
-    private var mRepository: LoginRepository = LoginRepository.getInstance(mApplication)
+    private var mRepository: LoginRepository = LoginRepository.getInstance()
 
-    val isUserLoggedIn: Boolean = false//!TextUtils.isEmpty(mRepository.getSession(mApplication))
+    val isUserLoggedIn: Boolean = false
 
     /**
      * This is new user registration method.
@@ -20,5 +22,13 @@ class LoginViewModel(private val mApplication: Application) : AndroidViewModel(m
 
     fun getUser(email: String): LiveData<User> {
         return mRepository.getUser(mApplication, email)
+    }
+
+    fun createSession(email: String): LiveData<Session> {
+        return mRepository.createSession(mApplication, Session(email, UUID.randomUUID().toString()))
+    }
+
+    fun getSession(email: String): LiveData<Session> {
+        return mRepository.getSession(mApplication, email)
     }
 }

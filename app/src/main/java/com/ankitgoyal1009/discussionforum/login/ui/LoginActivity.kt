@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.ankitgoyal1009.discussionforum.R
 import com.ankitgoyal1009.discussionforum.login.LoginViewModel
 import com.ankitgoyal1009.discussionforum.login.RegisterActivity
+import com.ankitgoyal1009.discussionforum.login.data.User
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var model: LoginViewModel
@@ -23,9 +26,9 @@ class LoginActivity : AppCompatActivity() {
         model = ViewModelProvider(this).get(LoginViewModel::class.java)
     }
 
-    fun doLogin() {
-        val etEmailText = etEmail.getText().toString()
-        val etPwdText = etPwd.getText().toString()
+    fun doLogin(view: View) {
+        val etEmailText = etEmail.text.trim().toString()
+        val etPwdText = etPwd.text.trim().toString()
         var valid = true
         if (TextUtils.isEmpty(etEmailText)) {
             etEmail.setError(getString(R.string.error_required))
@@ -37,7 +40,38 @@ class LoginActivity : AppCompatActivity() {
             valid = false
         }
 
-        //todo call view model to do login here
+        model.getUser(etEmailText).observe(this, object : Observer<User> {
+            override fun onChanged(user: User?) {
+                if (user == null) {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        R.string.error_authentication_failed,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+
+                if (etPwdText == user.pwd) {
+                    model.createSession(user.email)
+                    //todo start discussion list activity here and finish login activity
+//                    DiscussionsListActivity.startActivity(this@LoginActivity)
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Login Success",
+                        Toast.LENGTH_SHORT
+                    ).show()
+//                    this@LoginActivity.finish()
+                } else {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        R.string.error_authentication_failed,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+            }
+
+        })
     }
 
     fun startRegistrationActivity(view: View) {

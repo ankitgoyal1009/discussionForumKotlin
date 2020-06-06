@@ -71,7 +71,7 @@ class RegisterActivity : AppCompatActivity() {
                         return
                     }
                     registerUser(displayName, email, pwd)
-                    userLiveData.removeObservers(this@RegisterActivity)
+                    userLiveData.removeObserver(this)
                 }
 
             }
@@ -81,8 +81,8 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun registerUser(displayName: String, email: String, pwd: String) {
         val userLiveData = mViewModel.registerUser(displayName, email, pwd)
-        userLiveData.observe(this,
-            Observer { user ->
+        val observer = object : Observer<User> {
+            override fun onChanged(user: User?) {
                 if (user != null) {
                     Toast.makeText(
                         this@RegisterActivity,
@@ -90,7 +90,6 @@ class RegisterActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     this@RegisterActivity.finish()
-                    userLiveData.removeObservers(this@RegisterActivity)
                 } else {
                     Toast.makeText(
                         this@RegisterActivity,
@@ -98,6 +97,9 @@ class RegisterActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            })
+                userLiveData.removeObserver(this)
+            }
+        }
+        userLiveData.observe(this, observer)
     }
 }
