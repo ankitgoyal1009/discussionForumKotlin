@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.ankitgoyal1009.discussionforum.discussions.ui.DiscussionsActivity
 import com.ankitgoyal1009.discussionforum.login.LoginViewModel
 import com.ankitgoyal1009.discussionforum.login.ui.LoginActivity
 
@@ -19,8 +20,9 @@ class SplashScreen : AppCompatActivity() {
         Handler().postDelayed({
             if (!model.isUserLoggedIn) {
                 startLoginActivity()
+            } else {
+                DiscussionsActivity.startActivity(this)
             }
-            //todo go to discussion forum here if user is already logged in
             this@SplashScreen.finish()
         }, 2000)
     }

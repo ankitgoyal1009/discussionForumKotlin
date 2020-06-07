@@ -10,7 +10,7 @@ import java.util.*
 class LoginViewModel(private val mApplication: Application) : AndroidViewModel(mApplication) {
     private var mRepository: LoginRepository = LoginRepository.getInstance()
 
-    val isUserLoggedIn: Boolean = false
+    val isUserLoggedIn: Boolean = true
 
     /**
      * This is new user registration method.

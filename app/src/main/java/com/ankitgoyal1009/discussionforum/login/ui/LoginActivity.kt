@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.ankitgoyal1009.discussionforum.R
+import com.ankitgoyal1009.discussionforum.discussions.ui.DiscussionsActivity
 import com.ankitgoyal1009.discussionforum.login.LoginViewModel
 import com.ankitgoyal1009.discussionforum.login.RegisterActivity
 import com.ankitgoyal1009.discussionforum.login.data.User
@@ -53,14 +54,13 @@ class LoginActivity : AppCompatActivity() {
 
                 if (etPwdText == user.pwd) {
                     model.createSession(user.email)
-                    //todo start discussion list activity here and finish login activity
-//                    DiscussionsListActivity.startActivity(this@LoginActivity)
+                    DiscussionsActivity.startActivity(this@LoginActivity)
                     Toast.makeText(
                         this@LoginActivity,
                         "Login Success",
                         Toast.LENGTH_SHORT
                     ).show()
-//                    this@LoginActivity.finish()
+                    this@LoginActivity.finish()
                 } else {
                     Toast.makeText(
                         this@LoginActivity,
