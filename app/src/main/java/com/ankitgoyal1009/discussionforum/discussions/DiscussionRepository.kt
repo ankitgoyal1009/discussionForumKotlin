@@ -1,15 +1,14 @@
 package com.ankitgoyal1009.discussionforum.discussions
 
 import android.content.Context
-import android.os.AsyncTask
 import android.text.format.DateUtils
 import androidx.lifecycle.LiveData
 import com.ankitgoyal1009.discussionforum.R
 import com.ankitgoyal1009.discussionforum.common.Gson
 import com.ankitgoyal1009.discussionforum.common.Util
+import com.ankitgoyal1009.discussionforum.common.data.DateUtil
 import com.ankitgoyal1009.discussionforum.common.data.DiscussionDatabase
 import com.ankitgoyal1009.discussionforum.discussions.data.Discussion
-import com.ankitgoyal1009.discussionforum.common.data.DateUtil
 import com.ankitgoyal1009.discussionforum.login.LoginRepository
 import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
@@ -45,16 +44,11 @@ class DiscussionRepository {
         return discussionsDao.getAllDiscussion()
     }
 
-    fun initDummyDiscussions(context: Context) {
-        object : AsyncTask<Any, Any, Any>() {
-            override fun doInBackground(objects: Array<Any>): Any? {
-                return parseDummyDiscussionData(context)
-            }
-
-        }.execute()
+    suspend fun initDummyDiscussions(context: Context) {
+        parseDummyDiscussionData(context)
     }
 
-    private fun parseDummyDiscussionData(context: Context) {
+    private suspend fun parseDummyDiscussionData(context: Context) {
         val type = object : TypeToken<List<Discussion>>() {}.getType()
         var list: List<Discussion>?
         try {

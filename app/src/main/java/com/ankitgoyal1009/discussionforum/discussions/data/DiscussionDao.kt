@@ -21,8 +21,8 @@ interface DiscussionDao {
     fun getAllPublishedDiscussion(timestamp: Long?): LiveData<List<Discussion>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(discussion: Discussion)
+    suspend fun insert(discussion: Discussion)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(discussion: List<Discussion>)
+    suspend fun insertAll(discussion: List<Discussion>)
 }

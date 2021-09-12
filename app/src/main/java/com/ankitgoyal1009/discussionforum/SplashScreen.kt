@@ -18,7 +18,7 @@ class SplashScreen : AppCompatActivity() {
         val model = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         Handler().postDelayed({
-            if (!model.isUserLoggedIn) {
+            if (!model.isUserLoggedIn()) {
                 startLoginActivity()
             } else {
                 DiscussionsActivity.startActivity(this)

@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.ankitgoyal1009.discussionforum.R
 import com.ankitgoyal1009.discussionforum.login.data.User
+import org.jetbrains.annotations.NotNull
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -62,6 +63,7 @@ class RegisterActivity : AppCompatActivity() {
             val userLiveData = mViewModel.getUser(email)
             val observer = object : Observer<User> {
                 override fun onChanged(user: User?) {
+                    userLiveData.removeObserver(this)
                     if (user != null) {
                         Toast.makeText(
                             this@RegisterActivity,
@@ -71,16 +73,15 @@ class RegisterActivity : AppCompatActivity() {
                         return
                     }
                     registerUser(displayName, email, pwd)
-                    userLiveData.removeObserver(this)
                 }
-
             }
             userLiveData.observe(this, observer)
         }
     }
 
-    private fun registerUser(displayName: String, email: String, pwd: String) {
-        val userLiveData = mViewModel.registerUser(displayName, email, pwd)
+    private fun registerUser(displayName: String, @NotNull email: String, pwd: String) {
+        mViewModel.registerUser(displayName, email, pwd)
+        val userLiveData = mViewModel.getUser(email)
         val observer = object : Observer<User> {
             override fun onChanged(user: User?) {
                 if (user != null) {
@@ -90,14 +91,7 @@ class RegisterActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     this@RegisterActivity.finish()
-                } else {
-                    Toast.makeText(
-                        this@RegisterActivity,
-                        "failed to register",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
-                userLiveData.removeObserver(this)
             }
         }
         userLiveData.observe(this, observer)

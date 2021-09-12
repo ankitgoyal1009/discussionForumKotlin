@@ -30,20 +30,19 @@ class LoginActivity : AppCompatActivity() {
     fun doLogin(view: View) {
         val etEmailText = etEmail.text.trim().toString()
         val etPwdText = etPwd.text.trim().toString()
-        var valid = true
-        if (TextUtils.isEmpty(etEmailText)) {
+        if (etEmailText.isNullOrEmpty()) {
             etEmail.setError(getString(R.string.error_required))
-            valid = false
+            return
         }
 
-        if (TextUtils.isEmpty(etPwdText)) {
+        if (etPwdText.isNullOrEmpty()) {
             etPwd.setError(getString(R.string.error_required))
-            valid = false
+            return
         }
 
         model.getUser(etEmailText).observe(this, object : Observer<User> {
             override fun onChanged(user: User?) {
-                if (user == null) {
+                if (user == null || !user.email.equals(etEmailText) || !user.pwd.equals(etPwdText)) {
                     Toast.makeText(
                         this@LoginActivity,
                         R.string.error_authentication_failed,
@@ -52,31 +51,20 @@ class LoginActivity : AppCompatActivity() {
                     return
                 }
 
-                if (etPwdText == user.pwd) {
-                    model.createSession(user.email)
-                    DiscussionsActivity.startActivity(this@LoginActivity)
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "Login Success",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    this@LoginActivity.finish()
-                } else {
-                    Toast.makeText(
-                        this@LoginActivity,
-                        R.string.error_authentication_failed,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
+                model.createSession(user.email)
+                DiscussionsActivity.startActivity(this@LoginActivity)
+                Toast.makeText(
+                    this@LoginActivity,
+                    "Login Success",
+                    Toast.LENGTH_SHORT
+                ).show()
+                this@LoginActivity.finish()
             }
-
         })
     }
 
     fun startRegistrationActivity(view: View) {
         val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
-        this.finish()
     }
 }

@@ -5,8 +5,10 @@ import android.text.format.DateUtils
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.ankitgoyal1009.discussionforum.discussions.ui.model.Discussion
+import androidx.lifecycle.viewModelScope
 import com.ankitgoyal1009.discussionforum.common.data.DateUtil
+import com.ankitgoyal1009.discussionforum.discussions.ui.model.Discussion
+import kotlinx.coroutines.launch
 
 class DiscussionViewModel(private val mApplication: Application) : AndroidViewModel(mApplication) {
     private var mRepository: DiscussionRepository = DiscussionRepository.getInstance()
@@ -35,6 +37,6 @@ class DiscussionViewModel(private val mApplication: Application) : AndroidViewMo
     }
 
     fun initDummyDiscussions() {
-        mRepository.initDummyDiscussions(mApplication)
+        viewModelScope.launch { mRepository.initDummyDiscussions(mApplication) }
     }
 }
